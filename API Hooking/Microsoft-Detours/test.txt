@@ -1,1 +1,49 @@
 
+#include <windows.h>
+#include <iostream>
+
+DWORD WINAPI ThreadFunc(LPVOID lpParam) {
+    int threadNum = *(int*)lpParam;
+
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "[Thread " << threadNum << "] Count: " << i << std::endl;
+        Sleep(500); // Simulate work
+    }
+    return 0;
+}
+
+int main() {
+    // 1. ✅ Create a new process (notepad.exe)
+    STARTUPINFO si = { sizeof(si) };
+    PROCESS_INFORMATION pi;
+    
+    if (CreateProcessA(
+        "C:\\Windows\\System32\\notepad.exe",
+        NULL, NULL, NULL, FALSE, 0, NULL, NULL,
+        &si, &pi
+    )) {
+        std::cout << "[+] Launched Notepad (Process ID: " << pi.dwProcessId << ")\n";
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    } else {
+        std::cout << "[-] Failed to launch Notepad\n";
+    }
+
+    // 2. ✅ Create threads inside this process
+    const int threadCount = 3;
+    HANDLE threads[threadCount];
+    int threadArgs[threadCount];
+
+    for (int i = 0; i < threadCount; ++i) {
+        threadArgs[i] = i + 1;
+        threads[i] = CreateThread(
+            NULL, 0, ThreadFunc, &threadArgs[i], 0, NULL
+        );
+    }
+
+    // 3. ✅ Wait for all threads to finish
+    WaitForMultipleObjects(threadCount, threads, TRUE, INFINITE);
+    std::cout << "[+] All threads finished!\n";
+
+    return 0;
+}
