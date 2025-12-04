@@ -18,3 +18,5 @@ cd C:\temp
 
 # Test basic command
 GodPotato.exe -cmd "whoami"
+
+net user lowpriv P@ssw0rd123! /add
